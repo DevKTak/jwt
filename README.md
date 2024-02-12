@@ -226,3 +226,18 @@ public class UserRepository {
     }
 }
 ```
+
+<img width="605" alt="image" src="https://github.com/DevKTak/jwt/assets/68748397/d5a696d4-d0fd-4905-8322-fde6bea0d385">
+ 
+ <br>
+ 
+ # Spring Security
+ UserDetailsService: 시큐리가 모든 유저를 알지 못하기 때문에 유저들의 인터페이스 유저 디테일즈를 마련해 둔 것
+
+## [SpringBoot 2에서 3으로 올릴 때, 주의 사항]
+1. 프로젝트 JDK 버전을 17 이상으로 올립니다.
+2. SpringBoot 버전을 순차적으로 (2.5 > 2.6 > 2.7) 업그레이드 합니다.
+3. javaEE -> Jakarta EE로 변경하기 위해, import javax. 패키지를 import javkarta.로 변경합니다. (한땀한땀 변경해야함..ㅎ…)
+4. Deprecated된 코드와 설정을 확인하세요.
+5. (옵션) AntPathMatcher를 사용중이라면, PathPatternParser로 변경하세요.
+6. build.gradle을 열어서 SpringBoot 버전을 3으로 마이그레이션 하세요.
