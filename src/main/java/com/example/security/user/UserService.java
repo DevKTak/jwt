@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +21,11 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public JoinUserResponse save(JoinUserRequest req) {
-		User user = userRepository.save(req.toEntity());
+		User user = userRepository.save(req.toEntity(passwordEncoder.encode(req.password())));
 
 		return JoinUserResponse.of(user);
 	}

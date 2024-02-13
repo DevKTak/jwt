@@ -8,10 +8,10 @@ public record JoinUserRequest(
 	String password,
 	Role role
 ) {
-	public User toEntity() {
+	public User toEntity(String encodedPassword) {
 		return User.builder()
 			.email(email)
-			.password(password)
+			.password(encodedPassword)
 			.role(role)
 			.build();
 	}
