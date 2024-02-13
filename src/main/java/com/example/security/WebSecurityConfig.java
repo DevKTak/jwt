@@ -5,10 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -28,13 +24,14 @@ public class WebSecurityConfig {
 				.loginPage("/login")
 				.permitAll())
 			// .formLogin().disable() // 너가 만들어주는 폼 로그인 안쓰고싶어
-			.logout(LogoutConfigurer::permitAll);
+			.logout(LogoutConfigurer::permitAll)
+			.csrf().disable(); // 백 작업시 필요없고 403 포비든 에러, 프론트가 붙으면 csrf() 켜줘야한다.
 
 		return http.build();
 	}
 
-	@Bean
-	// 시큐리가 모든 유저를 알지 못하기 때문에 유저들의 인터페이스 UserDetails를 마련해 둔 것
+/*	@Bean
+	// 시큐리티가 모든 유저를 알지 못하기 때문에 유저들의 인터페이스 UserDetails를 마련해 둔 것
 	// 사이트마다 아이디를 id, email, phoneNumber 로도 하며 패스워드는 pw, pwd 등 통일되지 않았기에 인터페이스를 제공
 	public UserDetailsService userDetailsService() {
 		UserDetails user = User.withDefaultPasswordEncoder()
@@ -44,5 +41,5 @@ public class WebSecurityConfig {
 			.build();
 
 		return new InMemoryUserDetailsManager(user);
-	}
+	}*/
 }
