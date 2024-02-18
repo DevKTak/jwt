@@ -33,7 +33,7 @@ public class User implements UserDetails {
 	private String password;
 
 	@Enumerated(value = EnumType.STRING)
-	private Role role = Role.USER;
+	private Role role = Role.ROLE_USER;
 
 	@Builder
 	public User(String email, String password, Role role) {
@@ -58,7 +58,7 @@ public class User implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// User가 가지고 있는 권한(Role)들
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(role.toString()));
+		authorities.add(new SimpleGrantedAuthority(role.name()));
 
 		return authorities;
 	}

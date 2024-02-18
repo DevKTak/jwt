@@ -1,4 +1,4 @@
-package com.example.security.user.dto;
+package com.example.security.user.dto.response;
 
 import com.example.security.user.Role;
 import com.example.security.user.User;

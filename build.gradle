@@ -44,6 +44,14 @@ dependencies {
 
     // MariaDB
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // JwtTokenProvider.java > createToken() 에러나서 추가함
+    // (이 오류는 Java 9부터 javax.xml.bind.DatatypeConverter 클래스가 제거되었기 때문에 발생합니다. )
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
 }
 
 tasks.named('test') {
