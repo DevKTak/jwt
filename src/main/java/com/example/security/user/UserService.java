@@ -1,8 +1,7 @@
 package com.example.security.user;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import java.util.NoSuchElementException;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +30,11 @@ public class UserService {
 		return JoinUserResponse.of(user);
 	}
 
+	@Transactional
 	public String login(LoginUserRequest req) {
-		User user = userRepository.findByEmail(req.username()).orElseThrow();
+		User user = userRepository.findByEmail(req.email())
+			.orElseThrow(() -> new NoSuchElementException("존재하지 않는 계정 정보입니다."));
 
-		return jwtTokenProvider.createToken(user.getUsername(), user.getAuthorities());
+		return jwtTokenProvider.createToken(user.getUsername(), user.getAuthorities(), user.getId());
 	}
 }

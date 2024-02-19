@@ -40,13 +40,13 @@ public class WebSecurityConfig {
 		http
 			.authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/", "/home", "/join", "/login").permitAll() // 이 URL 요청은 무조건 허가
-				.requestMatchers("/beauty/**").hasAnyRole("ROLE", "BEAUTY_AND_A_ADMIN")
-				.requestMatchers("/admin/**").hasAnyRole("ADMIN")
+				// .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+				// .requestMatchers("/admin/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated() // 그 외 요청은 무조건 인증을 받아야 한다.
 			)
-			// .formLogin((form) -> form
-			// 	.loginPage("/login")
-			// 	.permitAll())
+			.formLogin((form) -> form
+				// .loginPage("/login")
+				.loginProcessingUrl("/login"))
 			.formLogin(AbstractHttpConfigurer::disable) // 너가 만들어주는 폼 로그인 안쓰고싶어
 			.logout(LogoutConfigurer::permitAll) // 모든 사용자에게 로그아웃 권한 허용
 			.csrf().disable() // 백 작업시 필요없고 403 포비든 에러, 프론트가 붙으면 csrf() 켜줘야한다.

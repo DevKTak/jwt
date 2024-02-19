@@ -13,3 +13,7 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+#
+#jwt:
+#  issuer: qkrrudxkr77@gmail.com
+#  secret_key: jwt-test
