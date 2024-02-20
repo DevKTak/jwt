@@ -21,11 +21,14 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class JwtTokenProvider {
 
-	private String secretKey = "aaaabbbbccccddddd";
-	private final long tokenValidTime = 30 * 60 * 1000L; // 30min
-
 	@Autowired
 	private UserDetailsService userDetailsService;
+
+	@Autowired
+	private JwtProperties jwtProperties;
+
+	private String secretKey = jwtProperties.getSecretKey();
+	private final long tokenValidTime = 30 * 60 * 1000L; // 30min
 
 	@PostConstruct
 	public void init() {
@@ -37,7 +40,7 @@ public class JwtTokenProvider {
 	public String createToken(String email, Collection<? extends GrantedAuthority> roles, Long id) {
 		Claims claims = Jwts.claims().setSubject(email); // 유저 이메일
 		claims.put("roles", roles);
-		claims.put("iss", "qkrrudxkr77@gmail.com"); // iss: 이슈어(발급자)
+		claims.put("iss", jwtProperties.getIssuer()); // iss: 이슈어(발급자)
 		Date now = new Date();
 
 		// 토큰 생성
