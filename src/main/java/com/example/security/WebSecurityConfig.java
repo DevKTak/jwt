@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/", "/home", "/join", "/login").permitAll() // 이 URL 요청은 무조건 허가
 				// .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				// .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-				.requestMatchers("/admin/**").hasAnyRole(Role.ROLE_ADMIN.name())
+				.requestMatchers("/admin/**").hasAnyRole(Role.ROLE_ADMIN.getLabel())
 				.anyRequest().authenticated() // 그 외 요청은 무조건 인증을 받아야 한다.
 			)
 			// .formLogin((form) -> form
