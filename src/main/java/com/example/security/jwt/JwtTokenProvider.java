@@ -34,8 +34,8 @@ public class JwtTokenProvider {
 	}
 
 	// JWT 토큰 생성
-	public String createToken(String username, Collection<? extends GrantedAuthority> roles, Long id) {
-		Claims claims = Jwts.claims().setSubject(username); // 유저이 이메일
+	public String createToken(String email, Collection<? extends GrantedAuthority> roles, Long id) {
+		Claims claims = Jwts.claims().setSubject(email); // 유저 이메일
 		claims.put("roles", roles);
 		claims.put("iss", "qkrrudxkr77@gmail.com"); // iss: 이슈어(발급자)
 		Date now = new Date();

@@ -5,14 +5,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.example.security.jwt.JwtAuthenticationFilter;
 import com.example.security.jwt.JwtTokenProvider;
+import com.example.security.user.Role;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 1) 인증(Authentication): 로그인
@@ -28,7 +32,10 @@ import com.example.security.jwt.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity // 시큐리티야 지금부터 너는 내 설정 따른다.
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+	private final CorsConfigurationSource corsConfigurationSource;
 
 	@Bean
 	public JwtTokenProvider jwtTokenProvider() {
@@ -42,14 +49,23 @@ public class WebSecurityConfig {
 				.requestMatchers("/", "/home", "/join", "/login").permitAll() // 이 URL 요청은 무조건 허가
 				// .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				// .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+				.requestMatchers("/admin/**").hasAnyRole(Role.ROLE_ADMIN.name())
 				.anyRequest().authenticated() // 그 외 요청은 무조건 인증을 받아야 한다.
 			)
-			.formLogin((form) -> form
-				// .loginPage("/login")
-				.loginProcessingUrl("/login"))
+			// .formLogin((form) -> form
+			// 	.usernameParameter("email")
+			// 	.passwordParameter("password"))
+			// .loginPage("/login")
+			// .loginProcessingUrl("/login"))
+			.csrf(AbstractHttpConfigurer::disable) // 백 작업시 필요없고 403 포비든 에러, 프론트가 붙으면 csrf() 켜줘야한다.
+			.cors(config -> config.configurationSource(corsConfigurationSource))
+			.httpBasic(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable) // 너가 만들어주는 폼 로그인 안쓰고싶어
-			.logout(LogoutConfigurer::permitAll) // 모든 사용자에게 로그아웃 권한 허용
-			.csrf().disable() // 백 작업시 필요없고 403 포비든 에러, 프론트가 붙으면 csrf() 켜줘야한다.
+			.rememberMe(AbstractHttpConfigurer::disable)
+			.logout(AbstractHttpConfigurer::disable)
+			.sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			// .logout(LogoutConfigurer::permitAll) // 모든 사용자에게 로그아웃 권한 허용
+
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider()),
 				UsernamePasswordAuthenticationFilter.class); // 1번 파라미터 구현체를 2번 파라미터 타입으로 사용
 

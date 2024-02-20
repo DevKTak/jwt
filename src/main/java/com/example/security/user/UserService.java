@@ -35,6 +35,9 @@ public class UserService {
 		User user = userRepository.findByEmail(req.email())
 			.orElseThrow(() -> new NoSuchElementException("존재하지 않는 계정 정보입니다."));
 
-		return jwtTokenProvider.createToken(user.getUsername(), user.getAuthorities(), user.getId());
+		if (!passwordEncoder.matches(req.password(), user.getPassword())) {
+			throw new IllegalArgumentException("패스워드 오류");
+		}
+		return jwtTokenProvider.createToken(user.getEmail(), user.getAuthorities(), user.getId());
 	}
 }

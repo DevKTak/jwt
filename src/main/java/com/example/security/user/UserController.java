@@ -30,7 +30,7 @@ public class UserController {
 		return userService.login(req);
 	}
 
-	@GetMapping("/test")
+	@GetMapping("/admin/test")
 	public String test() {
 		return "success!";
 	}
