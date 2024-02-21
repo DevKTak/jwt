@@ -5,12 +5,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.security.jwt.JwtTokenProvider;
 import com.example.security.user.dto.request.JoinUserRequest;
 import com.example.security.user.dto.request.LoginUserRequest;
 import com.example.security.user.dto.response.JoinUserResponse;
 
-import lombok.Getter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,8 +25,8 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestBody LoginUserRequest req) {
-		return userService.login(req);
+	public void login(@RequestBody LoginUserRequest req, HttpServletResponse response) {
+		userService.login(req, response);
 	}
 
 	@GetMapping("/admin/test")

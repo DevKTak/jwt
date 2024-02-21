@@ -8,8 +8,7 @@ import lombok.Builder;
 public record JoinUserResponse(
 	Long id,
 	String email,
-	Role role
-) {
+	Role role) {
 	@Builder
 	public JoinUserResponse {
 	}

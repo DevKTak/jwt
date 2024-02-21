@@ -2,17 +2,21 @@ package com.example.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.example.security.jwt.JwtAuthenticationFilter;
+import com.example.security.jwt.JwtProperties;
 import com.example.security.jwt.JwtTokenProvider;
 import com.example.security.user.Role;
 
@@ -36,10 +40,12 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 
 	private final CorsConfigurationSource corsConfigurationSource;
+	private final UserDetailsService userDetailsService;
+	private final JwtProperties jwtProperties;
 
 	@Bean
 	public JwtTokenProvider jwtTokenProvider() {
-		return new JwtTokenProvider();
+		return new JwtTokenProvider(userDetailsService, jwtProperties);
 	}
 
 	@Bean
@@ -59,11 +65,12 @@ public class WebSecurityConfig {
 			// .loginProcessingUrl("/login"))
 			.csrf(AbstractHttpConfigurer::disable) // 백 작업시 필요없고 403 포비든 에러, 프론트가 붙으면 csrf() 켜줘야한다.
 			.cors(config -> config.configurationSource(corsConfigurationSource))
-			.httpBasic(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable) // login form redirect 필요 X (rest api)
 			.formLogin(AbstractHttpConfigurer::disable) // 너가 만들어주는 폼 로그인 안쓰고싶어
 			.rememberMe(AbstractHttpConfigurer::disable)
 			.logout(AbstractHttpConfigurer::disable)
-			.sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.sessionManagement(
+				config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // jwt token으로 인증하므로 세션 필요 X
 			// .logout(LogoutConfigurer::permitAll) // 모든 사용자에게 로그아웃 권한 허용
 
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider()),
@@ -74,9 +81,16 @@ public class WebSecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		// return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+	public AuthenticationManager authenticationManager(
+		AuthenticationConfiguration authenticationConfiguration
+	) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 /*	@Bean
 	// 시큐리티가 모든 유저를 알지 못하기 때문에 유저들의 인터페이스 UserDetails를 마련해 둔 것
 	// 사이트마다 아이디를 id, email, phoneNumber 로도 하며 패스워드는 pw, pwd 등 통일되지 않았기에 인터페이스를 제공

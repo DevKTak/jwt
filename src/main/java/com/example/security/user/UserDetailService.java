@@ -25,7 +25,11 @@ public class UserDetailService implements UserDetailsService {
 		// UserDetails는 User를 추상화한 것
 		log.info(">>>>>>>>>>>>>>>>>>>>>>>>> loadUserByUsername 호출 ");
 
-		return userRepository.findByEmail(email)
-			.orElseThrow(() -> new IllegalArgumentException(email)); // userRepository에 회원가입(저장) 되어있는 객체를 꺼내주면 됩니다.
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new IllegalArgumentException(email));
+		return user;// userRepository에 회원가입(저장) 되어있는 객체를 꺼내주면 됩니다.
+
+		// return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+		// 	user.getAuthorities());
 	}
 }

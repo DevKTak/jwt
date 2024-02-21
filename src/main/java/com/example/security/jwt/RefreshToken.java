@@ -1,9 +1,11 @@
 package com.example.security.jwt;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,17 +20,18 @@ public class RefreshToken {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Long userId;
+	private String email;
 
+	@Column(length = 500)
 	private String refreshToken;
 
 	@Builder
-	public RefreshToken(Long userId, String refreshToken) {
-		this.userId = userId;
+	public RefreshToken(String email, String refreshToken) {
+		this.email = email;
 		this.refreshToken = refreshToken;
 	}
 
-	public RefreshToken update(String newRefreshToken) {
+	public RefreshToken change(String newRefreshToken) {
 		this.refreshToken = newRefreshToken;
 
 		return this;
