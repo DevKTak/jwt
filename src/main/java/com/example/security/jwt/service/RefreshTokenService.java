@@ -2,7 +2,7 @@ package com.example.security.jwt.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.security.jwt.RefreshToken;
+import com.example.security.jwt.domain.RefreshToken;
 import com.example.security.jwt.repository.RefreshTokenRepository;
 
 import lombok.RequiredArgsConstructor;

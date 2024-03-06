@@ -108,7 +108,7 @@ public class JwtTokenProvider {
 				.setSigningKey(secretKey)
 				.parseClaimsJws(token);
 			return true;
-			// return !claimsJws.getBody().getExpiration().before(new Date());
+			// return !claimsJws.getBody().getExpiration().before(new Date()); 나중에 주석풀고 만료 기간 판단하는 로직 개선해야함
 		} catch (SecurityException | MalformedJwtException | SignatureException e) {
 			log.error("Invalid JWT signature, 유효하지 않는 JWT 서명");
 			throw new NoSuchElementException(e.getMessage());

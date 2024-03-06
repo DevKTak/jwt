@@ -52,7 +52,6 @@ dependencies {
     // (이 오류는 Java 9부터 javax.xml.bind.DatatypeConverter 클래스가 제거되었기 때문에 발생합니다. )
     // XML 문서와 Java 객체 간 매핑을 자동화
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
-
 }
 
 tasks.named('test') {

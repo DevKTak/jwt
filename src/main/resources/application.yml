@@ -16,4 +16,4 @@ logging.level:
 
 jwt:
   issuer: qkrrudxkr77@gmail.com
-  secret_key: jwt-test
+  secret-key: jwt-test

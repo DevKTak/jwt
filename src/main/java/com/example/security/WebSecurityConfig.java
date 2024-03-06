@@ -91,6 +91,7 @@ public class WebSecurityConfig {
 	) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
+
 /*	@Bean
 	// 시큐리티가 모든 유저를 알지 못하기 때문에 유저들의 인터페이스 UserDetails를 마련해 둔 것
 	// 사이트마다 아이디를 id, email, phoneNumber 로도 하며 패스워드는 pw, pwd 등 통일되지 않았기에 인터페이스를 제공

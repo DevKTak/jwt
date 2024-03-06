@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.security.jwt.JwtTokenProvider;
-import com.example.security.jwt.RefreshToken;
+import com.example.security.jwt.domain.RefreshToken;
 import com.example.security.jwt.dto.TokenDto;
 import com.example.security.jwt.repository.RefreshTokenRepository;
 import com.example.security.user.dto.request.JoinUserRequest;
@@ -57,9 +57,7 @@ public class UserService {
 			// authenticationManager 통해 id, password 검증
 			// authenticate() 메소드 실행 시 UserDetailService.java 에서 만든 loadUserByUsername() 메소드 호출됨
 			Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-					user, req.password()
-				)
+				new UsernamePasswordAuthenticationToken(user, req.password())
 			);
 
 			// Access, Refresh 토큰 생성
